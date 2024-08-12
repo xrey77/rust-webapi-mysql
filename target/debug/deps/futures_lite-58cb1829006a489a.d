@@ -1,0 +1,11 @@
+/Users/reynald/My-Programs/Rust/rust-webapi-mysql/target/debug/deps/libfutures_lite-58cb1829006a489a.rmeta: /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/lib.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/future.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/prelude.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/stream.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/io.rs
+
+/Users/reynald/My-Programs/Rust/rust-webapi-mysql/target/debug/deps/libfutures_lite-58cb1829006a489a.rlib: /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/lib.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/future.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/prelude.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/stream.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/io.rs
+
+/Users/reynald/My-Programs/Rust/rust-webapi-mysql/target/debug/deps/futures_lite-58cb1829006a489a.d: /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/lib.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/future.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/prelude.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/stream.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/io.rs
+
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/lib.rs:
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/future.rs:
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/prelude.rs:
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/stream.rs:
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-lite-2.3.0/src/io.rs:

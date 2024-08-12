@@ -1,0 +1,12 @@
+/Users/reynald/My-Programs/Rust/rust-webapi-mysql/target/debug/deps/libspki-aef890dcf293d63e.rmeta: /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/lib.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/algorithm.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/error.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/spki.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/traits.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/../README.md
+
+/Users/reynald/My-Programs/Rust/rust-webapi-mysql/target/debug/deps/libspki-aef890dcf293d63e.rlib: /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/lib.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/algorithm.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/error.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/spki.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/traits.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/../README.md
+
+/Users/reynald/My-Programs/Rust/rust-webapi-mysql/target/debug/deps/spki-aef890dcf293d63e.d: /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/lib.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/algorithm.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/error.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/spki.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/traits.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/../README.md
+
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/lib.rs:
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/algorithm.rs:
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/error.rs:
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/spki.rs:
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/traits.rs:
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/spki-0.7.3/src/../README.md:
