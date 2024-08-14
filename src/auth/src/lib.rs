@@ -4,7 +4,33 @@ use bcrypt::{hash, verify};
 use serde::{Serialize, Deserialize};
 use serde_json::{json};
 use actix_web::{http::header::ContentType,web, post, HttpResponse};
-mod db;
+pub mod db;
+
+use jsonwebtoken::{encode, Algorithm, EncodingKey, Header};
+use chrono::{ Utc, Duration};
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Claims {
+    pub email: String,
+    pub exp: usize,
+}
+
+#[derive(Debug,FromRow, Deserialize, Serialize,PartialEq, Eq)]
+pub struct Userinfo {
+    pub id: i32,
+    pub lastname: String,
+    pub firstname: String,
+    pub emailadd: String,
+    pub mobileno: String,
+    pub username: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Userdata {
+    pub username: String,
+    pub password: String
+}
+
 
 #[derive(Debug,FromRow, Deserialize, Serialize,PartialEq, Eq)]
 pub struct Users {
@@ -41,7 +67,7 @@ pub async fn register(user_req: web::Json<Users>) -> HttpResponse {
             .bind(user_req.emailadd.to_string())
             .fetch_all(&pool).await.unwrap();
             if query_email_result.len() == 1 {
-                let err2 = json!({"statuscode": 201, "message": "Email Address is already taken."});            
+                let err2 = json!({"statuscode": 500, "message": "Email Address is already taken."});            
                 HttpResponse::Created().content_type(ContentType::json()).json(err2)
             } else {
 
@@ -50,7 +76,7 @@ pub async fn register(user_req: web::Json<Users>) -> HttpResponse {
                 .fetch_all(&pool).await.unwrap();
 
                 if query_username_result.len() == 1 {
-                    let err3 = json!({"statuscode": 201, "message": "Username is already taken."});            
+                    let err3 = json!({"statuscode": 500, "message": "Username is already taken."});            
                     HttpResponse::Created().content_type(ContentType::json()).json(err3)    
                 } else {
 
@@ -94,7 +120,7 @@ pub async fn userlogin(user_req: web::Json<Usersignin>) -> HttpResponse {
     let loginresult = task::block_on(db::connect());
     match loginresult {
         Err(err) => {
-            let msg1 = json!({"statuscode": 201,"message": "Cannot connect to MySQL database"});
+            let msg1 = json!({"statuscode": 500,"message": "Cannot connect to MySQL database"});
             println!("Cannot connect to MySQL database [{}]", err.to_string());
             HttpResponse::Created().content_type(ContentType::json()).json(msg1)
         }        
@@ -119,9 +145,39 @@ pub async fn userlogin(user_req: web::Json<Usersignin>) -> HttpResponse {
 
                 let is_password_correct = verify(user_req.password.to_string(), &hashed_password).unwrap();
                 if is_password_correct {
-                    HttpResponse::Created().content_type(ContentType::json()).json(user_req)
+
+                    let usrinfo = sqlx::query_as::<_, Userinfo>("select id,lastname,firstname,emailadd,mobileno,username from users where username = ?")
+                    .bind(user_req.username.to_string())        
+                    .fetch_one(&pool)
+                    .await.unwrap();
+    
+                    const JWT_SECRET: &[u8] = b"secret";
+
+                    let exp: usize = (Utc::now() + Duration::days(1)).timestamp() as usize;
+
+                    // let exp: usize = Utc::now()
+                    // .checked_add_signed(Duration::seconds(60))
+                    // .expect("valid timestamp")
+                    // .timestamp();
+                    // let path: web::Path<usize>;
+                    // let id: usize = path.into_inner();
+                    let email: String = usrinfo.emailadd.to_string();
+                    let claims: Claims = Claims{email,exp };
+                    let header = Header::new(Algorithm::HS512);
+
+                    let token: String = encode(
+                        &header,
+                        &claims,
+                        &EncodingKey::from_secret(JWT_SECRET)
+                    ).unwrap();
+
+                    let msg3 = json!({"statuscode": 201, "token": token, "user": usrinfo});
+
+                    // let token = auth::create_jwt(&uid, &Role::from_str(&user.role))
+                    // .map_err(|e| reject::custom(e))?;                    
+                    HttpResponse::Created().content_type(ContentType::json()).json(msg3)
                 } else {
-                    let msg3 = json!({"statuscode": 201,"message": "Incorrect Password, try again..."});
+                    let msg3 = json!({"statuscode": 500,"message": "Incorrect Password, try again..."});
                     HttpResponse::Created().content_type(ContentType::json()).json(msg3)    
     
                 }

@@ -10,10 +10,12 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .service(auth::register)
-            .service(user::get)
-            .service(user::update)
-            .service(user::delete)
             .service(auth::userlogin)
+            .service(user::get)
+            .service(user::getallusers)
+            .service(user::update)
+            .service(user::updatepassword)
+            .service(user::delete)
     })
     .bind(("127.0.0.1", 8080))?
     .run()
