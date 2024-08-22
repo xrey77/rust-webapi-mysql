@@ -1,1 +1,0 @@
-/Users/reynald/My-Programs/Python/Rust/rust-webapi-mysql/target/debug/rust-webapi-mysql: /Users/reynald/My-Programs/Python/Rust/rust-webapi-mysql/src/auth/src/db.rs /Users/reynald/My-Programs/Python/Rust/rust-webapi-mysql/src/auth/src/lib.rs /Users/reynald/My-Programs/Python/Rust/rust-webapi-mysql/src/main.rs /Users/reynald/My-Programs/Python/Rust/rust-webapi-mysql/src/user.rs
