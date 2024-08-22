@@ -1,0 +1,11 @@
+/Users/reynald/My-Programs/Python/Rust/rust-webapi-mysql/target/debug/deps/libsqlx-a63af51e25eea1df.rmeta: /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/lib.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/macros/mod.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/ty_match.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/lib.md /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/macros/test.md
+
+/Users/reynald/My-Programs/Python/Rust/rust-webapi-mysql/target/debug/deps/libsqlx-a63af51e25eea1df.rlib: /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/lib.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/macros/mod.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/ty_match.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/lib.md /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/macros/test.md
+
+/Users/reynald/My-Programs/Python/Rust/rust-webapi-mysql/target/debug/deps/sqlx-a63af51e25eea1df.d: /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/lib.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/macros/mod.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/ty_match.rs /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/lib.md /Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/macros/test.md
+
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/lib.rs:
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/macros/mod.rs:
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/ty_match.rs:
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/lib.md:
+/Users/reynald/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlx-0.7.4/src/macros/test.md:
