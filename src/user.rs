@@ -1,16 +1,11 @@
 use async_std::task;
 use sqlx::{FromRow};
-// use bcrypt::{hash};
 use serde::{Serialize, Deserialize};
 use serde_json::{json};
 use actix_web::{http::header::ContentType,web, get, patch, delete, HttpResponse, HttpRequest};
 use crate::auth;
-// use jsonwebtoken::{Algorithm, DecodingKey, Validation};
 use jsonwebtoken::{decode, DecodingKey, Validation};
 use std::collections::HashSet;
-// use crate::errors::ServiceError;
-
-
 
 #[derive(Serialize)]
 pub struct UserID {
@@ -47,23 +42,7 @@ pub struct Userupdate {
     pub lastname: String,
     pub firstname: String,
     pub mobileno: String,
-    // pub created_at: chrono::NaiveDateTime,
 }
-
-// use warp::{
-//     filters::header::headers_cloned,
-    // http::header::{HeaderMap, HeaderValue, AUTHORIZATION},
-    // reject, Filter, Rejection,
-// };
-
-// pub fn with_auth(role: Role) -> impl Filter<Extract = (String,), Error = Rejection> + Clone {
-//     headers_cloned()
-//         .map(move |headers: HeaderMap<HeaderValue>| (role.clone(), headers))
-//         .and_then(authorize)
-// }
-
-
-
 
 // find a User by its id `/users/{id}`
 #[get("/users/{id}")]
