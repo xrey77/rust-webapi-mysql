@@ -1,4 +1,4 @@
-# RUST Programming Rest API and Single Page Application
+# RUST Single Page Application / Rest API
 
 Dependencies
 ======================

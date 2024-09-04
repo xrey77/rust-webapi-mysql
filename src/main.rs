@@ -4,18 +4,14 @@ mod user;
 use auth;
 use dotenv::dotenv;
 use actix_cors::Cors;
-// use common::authentication::auth_keys_service::{init_auth_keys, AuthService};
+
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    // let allowed_domain = std::env::var("ALLOWED_DOMAIN").unwrap();
-    // let scope = web::scope("/getusers").service(user::getallusers);
-
     dotenv().ok();
     HttpServer::new(|| {
         App::new()
             .wrap(
-                // Cors::new().supports_credentials() // Allows all origin
                 Cors::default()
                     .allowed_origin("http://localhost:3000")
                     .allowed_methods(vec!["GET", "POST", "PATCH", "DELETE"])
@@ -45,7 +41,6 @@ async fn main() -> std::io::Result<()> {
                 Files::new("/","./client/build")
                 .index_file("index.html")
             )
-
     })
     .bind(("127.0.0.1", 8080))?
     .run()

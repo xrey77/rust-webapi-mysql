@@ -3,9 +3,14 @@ use sqlx::{FromRow};
 // use bcrypt::{hash};
 use serde::{Serialize, Deserialize};
 use serde_json::{json};
-use actix_web::{http::header::ContentType,web, get, patch, delete, HttpResponse};
+use actix_web::{http::header::ContentType,web, get, patch, delete, HttpResponse, HttpRequest};
 use crate::auth;
+// use jsonwebtoken::{Algorithm, DecodingKey, Validation};
+use jsonwebtoken::{decode, DecodingKey, Validation};
+use std::collections::HashSet;
 // use crate::errors::ServiceError;
+
+
 
 #[derive(Serialize)]
 pub struct UserID {
@@ -58,6 +63,8 @@ pub struct Userupdate {
 // }
 
 
+
+
 // find a User by its id `/users/{id}`
 #[get("/users/{id}")]
 pub async fn get(params: web::Path<String>) -> HttpResponse {
@@ -95,70 +102,54 @@ pub async fn get(params: web::Path<String>) -> HttpResponse {
 
 // list all User by its id `/users`
 #[get("/users")]
-pub async fn getallusers() -> HttpResponse {
-    // let jwt_secret = std::env::var("SECRET_KEY").expect("SECRET_KEY must be set.");
-    // let req_headers = req.headers();
-    // let basic_auth_header = req_headers.get("Authorization");
-    // let basic_auth: &str = basic_auth_header.unwrap().to_str().unwrap();
+pub async fn getallusers(_req: HttpRequest) -> HttpResponse {
+    let jwt_secret = std::env::var("SECRET_KEY").expect("SECRET_KEY must be set.");
+    let req_headers = _req.headers();
 
-    // if basic_auth.is_empty() {
-        // panic!("Un-Authorized user.");
-    //     let msg1 = json!({"statuscode": 500,"message": "Un-Authorized user."});
-    //     return HttpResponse::Created().content_type(ContentType::json()).json(msg1)
-    // };
-    // println!("no content type");
-    // let msg1 = json!({"statuscode": 500,"message": "Un-Authorized user."});
-    // HttpResponse::Created().content_type(ContentType::json()).json(msg1)
+    if req_headers.get("Authorization").is_none() {
+        let msg1x = json!({"statuscode": 500,"message": "UnAuthorized Access..."});
+        return HttpResponse::Created().content_type(ContentType::json()).json(msg1x)    
+    } else {
+        let basic_auth_header = req_headers.get("Authorization");
+        let basic_auth: Vec<String> = basic_auth_header.unwrap().to_str().unwrap().split("Bearer").map(|s| s.to_string()).collect();
+        let token = basic_auth[1].trim();    
+        let mut validation = jsonwebtoken::Validation::new(jsonwebtoken::Algorithm::HS256);
+        // skip exp validation, which is on by default
+        validation.required_spec_claims = HashSet::new();        
+        // skip aud validation
+        validation.validate_aud = false;        
+        // decode token
+        let res = match decode::<auth::Claims>(&token, &DecodingKey::from_secret(jwt_secret.as_ref()), &Validation::default()) {
+            Ok(_res) => {
+                
+            },
+            Err(_error) => {
+                let msg1x = json!({"statuscode": 500,"message": "Invalid Token..."});
+                return HttpResponse::Created().content_type(ContentType::json()).json(msg1x)    
+           }
+        };
 
-        // "No content-type header.".to_owned()
-
-    // println!("{}", basic_auth);
-    // let jwt_secret = std::env::var("SECRET_KEY").expect("SECRET_KEY must be set.");
-    // println!("SECRET KEY : {}", jwt_secret);
-
-    // let context_extractor = warp::any().and(
-    //     warp::header::<String>("authorization")
-    //         .map(|token: String| -> Context {
-    //             let token_data = match verify_jwt(token) {
-    //                 Ok(t) => t,
-    //                 Err(_) => return Context { user_id: 0 },
-    //             };
-
-    //             Context {
-    //                 user_id: token_data.claims.user_id,
-    //             }
-    //         })
-    //         .or(warp::any().map(|| Context { user_id: 0 }))
-    //         .unify(),
-    // );
-
-    // let _default_auth = warp::any().map(|| {
-    //     println!("default auth..");
-    // });
-
-    // let auth = warp::header("authorization")
-    //     .map(|token: String| {
-    //         // something with token
-    //     })
-    //     .or(default_auth)
-    //     .unify();
-
-
-
-    let userid_result = task::block_on(auth::db::connect());
-    match userid_result {
-        Err(_err) => {
-            let msg1 = json!({"statuscode": 500,"message": "Cannot connect to MySQL database"});
-            HttpResponse::Created().content_type(ContentType::json()).json(msg1)
+        println!("res {:?}", res);
+        let userid_result = task::block_on(auth::db::connect());
+        match userid_result {
+            Err(_err) => {
+                let msg1 = json!({"statuscode": 500,"message": "Cannot connect to MySQL database"});
+                HttpResponse::Created().content_type(ContentType::json()).json(msg1)
+            }
+    
+            Ok(pool) => {
+                    let rows = sqlx::query_as::<_, Userlist>("SELECT id,lastname,firstname,emailadd,mobileno,username FROM users")
+                    .fetch_all(&pool)
+                    .await.unwrap();
+                    HttpResponse::Created().content_type(ContentType::json()).json(rows)
+            }
         }
 
-        Ok(pool) => {
-                let rows = sqlx::query_as::<_, Userlist>("SELECT id,lastname,firstname,emailadd,mobileno,username FROM users")
-                .fetch_all(&pool)
-                .await.unwrap();
-                HttpResponse::Created().content_type(ContentType::json()).json(rows)
-        }
+
     }
+
+
+
 }
 
 // find a User by its id `/users/{id}` then update

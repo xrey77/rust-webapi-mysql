@@ -4,7 +4,7 @@ use bcrypt::{hash, verify};
 use serde::{Serialize, Deserialize};
 use serde_json::{json};
 use actix_web::{http::header::ContentType,web, post, HttpResponse};
-
+// pub mod error;
 pub mod db;
 
 use jsonwebtoken::{encode, Algorithm, EncodingKey, Header};
@@ -148,18 +148,17 @@ pub async fn userlogin(user_req: web::Json<Usersignin>) -> HttpResponse {
                     .fetch_one(&pool)
                     .await.unwrap();
 
+                    // GENERATE TOKEN 
                     let jwt_secret = std::env::var("SECRET_KEY").expect("SECRET_KEY must be set.");
                     let exp: usize = (Utc::now() + Duration::hours(8)).timestamp() as usize;
                     let email: String = usrinfo.emailadd.to_string();
                     let claims: Claims = Claims{email,exp };
-                    let header = Header::new(Algorithm::HS512);
+                    let header = Header::new(Algorithm::HS256);
                     let token: String = encode(
                         &header,
                         &claims,
                         &EncodingKey::from_secret(jwt_secret.as_str().as_ref())
                     ).unwrap();
-
-
 
                     let msg3 = json!({"statuscode": 201,"message": "Success...","token": token, "user": usrinfo});
                     HttpResponse::Created().content_type(ContentType::json()).json(msg3)
