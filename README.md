@@ -1,6 +1,12 @@
 # RUST Single Page Application / Rest API
 
-Dependencies
+Front End
+=========
+React / Javascript
+Axios
+Bootstrap 5
+
+Cargo.toml Dependencies
 ======================
 1. Rust v1.82.0
 2. Actix-Web v4.2.1

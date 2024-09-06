@@ -1,3 +1,5 @@
+use std::path::Path;
+use std::ffi::OsStr;
 use async_std::task;
 use sqlx::{FromRow};
 use serde::{Serialize, Deserialize};
@@ -5,13 +7,59 @@ use serde_json::{json};
 use actix_web::{http::header::ContentType,web, get, patch, delete,
     HttpResponse, HttpRequest, http::header::CONTENT_LENGTH};
 use crate::auth;
+// use std::path::PathBuf;
+// use actix_files as fs;
+// use std::io::{ Result };
+// use std::path::Path;
 use tokio::fs;
 use tokio::io::AsyncWriteExt as _;
+// use actix_multipart::form::{tempfile::TempFile, MultipartForm};
 use actix_multipart::Multipart;
 use futures_util::{ TryStreamExt as _ };
 use mime::{ Mime, IMAGE_PNG, IMAGE_JPEG, IMAGE_GIF };
 use uuid::Uuid;
-use image::{ DynamicImage, imageops::FilterType };
+// use image::{ DynamicImage, imageops::FilterType };
+
+// use actix_multipart::form::{json::Json as MPJson, tempfile::TempFile, MultipartForm};
+
+// use std::io::Write;
+// use actix_multipart::{
+//     form::{
+//         tempfile::{TempFile},
+//         MultipartForm,
+//     },
+//     // Multipart
+// };
+// use uuid::Uuid;
+// use futures_util::TryStreamExt as _;
+
+// use actix_multipart::Multipart;
+// use futures::{StreamExt, TryStreamExt};
+
+// #[derive(Debug, MultipartForm)]
+// struct UploadForm {
+//     #[multipart(rename = "file")]
+//     files: Vec<TempFile>,
+// }
+
+
+// #[derive(Debug, Deserialize)]
+// struct Metadata {
+//     name: String,
+// }
+
+// #[derive(Debug, MultipartForm)]
+// struct UploadForm {
+//     #[multipart(limit = "100MB")]
+//      file: TempFile,
+//     // json: MPJson<Metadata>,
+// }
+
+
+// #[derive(Debug, MultipartForm)]
+// struct FormData {
+//     pub files: Vec<TempFile>,
+// }
 
 #[derive(Serialize)]
 pub struct UserID {
@@ -21,11 +69,6 @@ pub struct UserID {
 #[derive(Serialize,Deserialize, FromRow)]
 pub struct Userpassword {
     pub password: String,
-}
-
-#[derive(Serialize,Deserialize, FromRow)]
-pub struct Userprofilepic {
-    pub profilepic: String,
 }
 
 #[derive(Debug,FromRow, Deserialize, Serialize,PartialEq, Eq)]
@@ -93,6 +136,8 @@ pub async fn get(params: web::Path<String>,req: HttpRequest) -> HttpResponse {
         let msg = json!({"statuscode": 401,"message": "UnAuthorize Access.."});
         HttpResponse::Created().content_type(ContentType::json()).json(msg)
     }
+
+
 }
 
 // list all User by its id `/users`
@@ -245,31 +290,79 @@ pub async fn delete(params: web::Path<String>, req: HttpRequest) -> HttpResponse
     }
 }
 
+
+// async fn save_files(MultipartForm(form): MultipartForm<UploadForm>) -> Result<impl Responder, Error> {
+//     for f in form.files {
+//         let path = format!("/{}", f.file_name.unwrap());
+//         // log::info!("saving to {path}");
+//         f.file.persist(path).unwrap();
+//     }
+
+//     Ok(HttpResponse::Ok())
+// }
+// #[post("/users/updateuserpic")]
+// pub async fn post_picture(MultipartForm(form): MultipartForm<UploadForm>) -> impl Responder {
+//     println!("{}", "uploaded....");
+//     format!(
+//         "Uploaded {}, with size: {}",
+//         "./lilian.png", form.file.size
+//     )
+// }
+
+fn get_extension_from_filename(filename: &str) -> Option<&str> {
+    Path::new(filename)
+        .extension()
+        .and_then(OsStr::to_str)
+}
+
 #[patch("/users/updateuserpic/{id}")]
-pub async fn updateusepic(mut payload: Multipart,params: web::Path<String>, request: HttpRequest) -> HttpResponse {
-    let xid: String = params.to_string();
-    let newid = xid.parse::<i32>().unwrap();
-    let content_length: usize = match request.headers().get(CONTENT_LENGTH) {
+pub async fn updateusepic(mut payload: Multipart,params: web::Path<String>, req: HttpRequest) -> HttpResponse {
+    let idno = UserID {
+        id: params.to_string(),
+    };
+    // let xid: String = format!("{}",idno.id);
+    let xid = idno.id + ".";
+    // let mut newfile: Vec<&str>;
+    // println!("ID NO : {}",idno.id.to_string());
+    let mut newfile = String::from("");
+    let content_length: usize = match req.headers().get(CONTENT_LENGTH) {
         Some(header_value) => header_value.to_str().unwrap_or("0").parse().unwrap(),
         None => "0".parse().unwrap(),
     };
+
     let max_file_count: usize = 3;
-    let max_file_size: usize = 900_000;
+    let max_file_size: usize = 300_000;
     let legal_filetypes: [Mime; 3] = [IMAGE_PNG, IMAGE_JPEG, IMAGE_GIF];
     let mut current_count: usize = 0;
-    let dir: &str = "./client/public/users/";
+    let dir: &str = "./client/public/";
+    // println!("CONTENT LENGTH {:?}", content_length);
+    // println!("MAX LENGHT {:?}", max_file_size);
 
     if content_length > max_file_size { 
         let msg1a = json!({"statuscode": 500, "message": "Bad Request...."});
         return HttpResponse::Created().content_type(ContentType::json()).json(msg1a)    
+        // return HttpResponse::BadRequest().into(); 
     }
     loop {
         if current_count == max_file_count { break; }
         if let Ok(Some(mut field)) = payload.try_next().await {
             let filetype: Option<&Mime> = field.content_type();
+            // println!("FILE TYPE {:?}", filetype);
             if filetype.is_none() { continue; }
             if !legal_filetypes.contains(&filetype.unwrap()) { continue; }
+            // if field.name() != "avatar" { continue; }
 
+            // println!("content_length: {:#?}", content_length);
+            // println!("{}. picture:", current_count);
+            // println!("name {}", field.name()); // &str
+            // println!("headers {}", field.headers());
+            // println!("content type {:?}", field.content_type()); // &Mime
+            // println!("content type is mime::IMAGE_PNG {}", field.content_type() == &IMAGE_PNG);
+
+            // In a multipart/form-data body, the HTTP Content-Disposition general header is a header that can be used on the subpart of a multipart body to give information about the field it applies to. The subpart is delimited by the boundary defined in the Content-Type header. Used on the body itself, Content-Disposition has no effect.
+            // println!("content disposition {}", field.content_disposition()); // &ContentDisposition
+
+            // println!("filename {}", field.content_disposition().get_filename().unwrap()); // Option<&str>
             let destination: String = format!(
                 "{}{}-{}",
                 dir,
@@ -277,41 +370,39 @@ pub async fn updateusepic(mut payload: Multipart,params: web::Path<String>, requ
                 field.content_disposition().get_filename().unwrap()
             );
 
+            let _ = match get_extension_from_filename(field.content_disposition().get_filename().unwrap()) {
+                None => {
+                    println!("{}","None..");
+                }
+                Some(x) => {
+                    // newfile = format!("{}{}",xid, x);
+                    newfile = xid.clone() + x;
+                    // println!("{}", x);
+                }
+            };
+            println!("EXTENTION {:?}", newfile);
+            // println!("DESTINATION {:?}",destination);
+            // let newfile = idno.id + "." + &ext;
+
             let mut saved_file: fs::File = fs::File::create(&destination).await.unwrap();
             while let Ok(Some(chunk)) = field.try_next().await {
                 let _ = saved_file.write_all(&chunk).await.unwrap();
             }
-            web::block(move || async move {
-                let uploaded_img: DynamicImage = image::open(&destination).unwrap();
-                let _ = fs::remove_file(&destination).await.unwrap();
-                uploaded_img
-                    .resize_exact(200, 200, FilterType::Gaussian)
-                    .save(format!("{}{}.jpg", dir,newid)).unwrap();
-            }).await.unwrap().await;
-            
-                // SAVE NEW FILENAME TO DATABASE
-                let newfilename = format!("{}.jpg", newid);
-                let userid_result = task::block_on(auth::db::connect());
-                match userid_result {
-                    Err(_err) => {
-                        let msg1b = json!({"statuscode": 500,"message": "Unable to update profile picture.."});
-                        return HttpResponse::Created().content_type(ContentType::json()).json(msg1b)                            
-                    }
+            // println!("{:?}",newfile);
+            // web::block(move || async move {
+            //     let uploaded_img: DynamicImage = image::open(&destination).unwrap();
+            //     let _ = fs::remove_file(&destination).await.unwrap();
+            //     uploaded_img
+            //         .resize_exact(200, 200, FilterType::Gaussian)
+            //         .save(format!("{}{}.jpg", dir, newfile.unwrap().to_string())).unwrap();
+            // }).await.unwrap().await;
 
-                    Ok(pool) => {
-
-                        let _ = sqlx::query("UPDATE users SET profilepic=? WHERE id = ?")
-                            .bind(newfilename)
-                            .bind(newid.to_string())
-                            .execute(&pool)
-                            .await.unwrap();            
-                    }
-                }
-                
         } else { break; }
         current_count += 1;
     }
-    let msg1x = json!({"statuscode": 201,"message": "Profile picture has been changed.."});
-    return HttpResponse::Created().content_type(ContentType::json()).json(msg1x)                                                
 
+
+
+    let msg3 = json!({"statuscode": 201, "message": "Record(s) successfully deleted."});
+    HttpResponse::Created().content_type(ContentType::json()).json(msg3)
 }

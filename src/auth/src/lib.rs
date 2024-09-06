@@ -5,6 +5,7 @@ use serde::{Serialize, Deserialize};
 use serde_json::{json};
 use actix_web::{http::header::ContentType,web, post, HttpResponse};
 pub mod db;
+pub mod jwt;
 
 use jsonwebtoken::{encode, Algorithm, EncodingKey, Header};
 use chrono::{ Utc, Duration};
@@ -23,6 +24,7 @@ pub struct Userinfo {
     pub emailadd: String,
     pub mobileno: String,
     pub username: String,
+    pub profilepic: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -142,7 +144,7 @@ pub async fn userlogin(user_req: web::Json<Usersignin>) -> HttpResponse {
                 let is_password_correct = verify(user_req.password.to_string(), &hashed_password).unwrap();
                 if is_password_correct {
 
-                    let usrinfo = sqlx::query_as::<_, Userinfo>("select id,lastname,firstname,emailadd,mobileno,username from users where username = ?")
+                    let usrinfo = sqlx::query_as::<_, Userinfo>("select id,lastname,firstname,emailadd,mobileno,username,profilepic from users where username = ?")
                     .bind(user_req.username.to_string())
                     .fetch_one(&pool)
                     .await.unwrap();

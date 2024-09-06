@@ -1,3 +1,7 @@
+// Author    : Reynald Marquez-Gragasin
+// Email     : reynald89@icloud.com
+// Front End : React / Javascript
+
 use actix_files::Files;
 use actix_web::{App, HttpServer, http::header};
 mod user;
@@ -36,6 +40,7 @@ async fn main() -> std::io::Result<()> {
             .service(user::update)
             .service(user::updatepassword)
             .service(user::delete)
+            .service(user::updateusepic)
             .service(
                 Files::new("/","./client/build")
                 .index_file("index.html")
